@@ -17,6 +17,14 @@ class Box:
             (0, 1, 1),  # cyan
             (1, 1, 1),  # white
             (0, 0, 0),  # black
+            (1, 0, 0),  # red
+            (0, 1, 0),  # green
+            (0, 0, 1),  # blue
+            (1, 1, 0),  # yellow
+            (1, 0, 1),  # magenta
+            (0, 1, 1),  # cyan
+            (1, 1, 1),  # white
+            (0, 0, 0),  # black
         ]
 
     def draw(self):
@@ -24,7 +32,7 @@ class Box:
         glTranslatef(self.pos[0], self.pos[1], self.pos[2])
         glBegin(GL_QUADS)
         for i, edge in enumerate(self.edges):
-            # glColor3fv(self.colors[i])
+            glColor3fv(self.colors[i])
             for vertex in edge:
                 glVertex3fv(self.vertices[vertex])
         glEnd()

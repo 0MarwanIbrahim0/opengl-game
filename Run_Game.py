@@ -1,4 +1,7 @@
 import random
+
+import pygame.time
+
 from Bottle import *
 from Result import *
 from box import *
@@ -66,6 +69,6 @@ def run_game():
             # # display the game over message
             Draw.draw_text(f"Score: {score}", 32, (0, 255, 0), 10, 0.9, -10)
             Draw.draw_text('GAME OVER', 72, (255, 0, 0), -1.3, 0, 0)
-            Draw.draw_text('Click Q to Quit Or R to Try again', 30, (255, 0, 0), -1.3, -1.5, 0)
             pygame.display.flip()
+            pygame.time.wait(5000)
             running = False
