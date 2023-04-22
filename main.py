@@ -22,7 +22,7 @@ while True:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             screen_finish = pygame.display.set_mode((800, 600))
-            screen_finish.blit(Background,(0,0))
+            screen_finish.blit(Background, (0, 0))
             BUTTON_START.draw(screen_finish)
             BUTTON_QUIT.draw(screen_finish)
             if BUTTON_START.is_clicked(mouse_pos):

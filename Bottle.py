@@ -4,7 +4,7 @@ from OpenGL.raw.GLU import *
 
 
 class Cylinder:
-    def __init__(self, pos, size, speed, num_segments, radius, ):
+    def __init__(self, pos, size, speed, num_segments, radius):
         self.pos = pos
         self.size = size
         self.speed = speed

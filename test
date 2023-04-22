@@ -1,32 +1,82 @@
-from Run_Game import *
-from Button import *
+import pygame
+from pygame.locals import *
 
-# initialize pygame
+from OpenGL.GL import *
+from OpenGL.GLU import *
+
+# initialize Pygame
 pygame.init()
+
 # set display width and height
-screen_main = pygame.display.set_mode((800, 600))
-Background = pygame.image.load("Backound.png")
-screen_main.blit(Background, (0, 0))
-BUTTON_START = Button(350, 600 / 2, 100, 50, (255, 153, 51), "Start")
-BUTTON_START.draw(screen_main)
-BUTTON_QUIT = Button(350, 400, 100, 50, (255, 153, 51), "Quit")
-BUTTON_QUIT.draw(screen_main)
-pygame.display.update()
+display = (800, 600)
+screen = pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+
+# load texture image
+texture_surface = pygame.image.load("box.jpg")
+texture_data = pygame.image.tostring(texture_surface, "RGBA", 1)
+
+# set up cube vertices and texture coordinates
+vertices = (
+    (-1, -1, -1),
+    (1, -1, -1),
+    (1, 1, -1),
+    (-1, 1, -1),
+    (-1, -1, 1),
+    (1, -1, 1),
+    (1, 1, 1),
+    (-1, 1, 1)
+)
+
+tex_coords = (
+    (0, 0),
+    (1, 0),
+    (1, 1),
+    (0, 1)
+)
+
+# set up cube faces and their corresponding vertices and texture coordinates
+faces = (
+    (0, 1, 2, 3),
+    (3, 2, 6, 7),
+    (7, 6, 5, 4),
+    (4, 5, 1, 0),
+    (1, 5, 6, 2),
+    (4, 0, 3, 7)
+)
+
+# create cube texture
+glEnable(GL_TEXTURE_2D)
+texture = glGenTextures(1)
+glBindTexture(GL_TEXTURE_2D, texture)
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture_surface.get_width(),
+             texture_surface.get_height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data)
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+
+# set up the projection matrix
+glMatrixMode(GL_PROJECTION)
+gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+
+# set up the modelview matrix
+glMatrixMode(GL_MODELVIEW)
+glTranslatef(0.0, 0.0, -5)
+glRotatef(30, 60, 60, 10)
+
+# draw the cube
 while True:
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_q:
-                pygame.quit()
-                quit()
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = pygame.mouse.get_pos()
-            screen_finish = pygame.display.set_mode((800, 600))
-            screen_finish.blit(Background,(0,0))
-            BUTTON_START.draw(screen_finish)
-            BUTTON_QUIT.draw(screen_finish)
-            if BUTTON_START.is_clicked(mouse_pos):
-                run_game()
-            elif BUTTON_QUIT.is_clicked(mouse_pos):
-                pygame.quit()
-                quit()
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+    # draw the cube
+    glBegin(GL_QUADS)
+    for face in faces:
+        for vertex, tex_coord in zip(face, tex_coords):
+            glTexCoord2f(tex_coord[0], tex_coord[1])
+            glVertex3fv(vertices[vertex])
+    glEnd()
+
+    pygame.display.flip()

@@ -25,7 +25,7 @@ def run_game():
     radius = 0.5
     bottle_pos = [random.uniform(-3, 3), 2, -1]
     bottle_size = 0.5
-    bottle_speed = 0.005
+    bottle_speed = 0.003
     bottle = Cylinder(bottle_pos, bottle_size, bottle_speed, num_segments, radius)
     running = True
 
@@ -37,7 +37,7 @@ def run_game():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # Draw the Box
-        box.draw()
+        box.draw("box.jpg")
         # update the bottle position
         bottle.update()
         bottle_pos[1] -= bottle_speed
@@ -70,5 +70,5 @@ def run_game():
             Draw.draw_text(f"Score: {score}", 32, (0, 255, 0), 10, 0.9, -10)
             Draw.draw_text('GAME OVER', 72, (255, 0, 0), -1.3, 0, 0)
             pygame.display.flip()
-            pygame.time.wait(5000)
+            pygame.time.wait(2500)
             running = False
